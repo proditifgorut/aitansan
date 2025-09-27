@@ -1,14 +1,21 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { Zap, ArrowRight, Play, CheckCircle } from 'lucide-vue-next'
+import SignupModal from './SignupModal.vue'
 
 const isVisible = ref(false)
+const isSignupModalOpen = ref(false)
 
 const benefits = [
   'Tanpa coding yang rumit',
   'Deploy dalam hitungan menit',
   'Gratis untuk memulai'
 ]
+
+const handleSignup = (data: { name: string; email: string; password: string }) => {
+  console.log('User signed up:', data)
+  // Here you would integrate with Supabase
+}
 
 onMounted(() => {
   setTimeout(() => {
@@ -64,7 +71,10 @@ onMounted(() => {
         :class="['transition-all duration-1000 delay-500', isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10']"
       >
         <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-          <button class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-300 flex items-center space-x-2 hover:scale-105 shadow-lg">
+          <button 
+            @click="isSignupModalOpen = true"
+            class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-300 flex items-center space-x-2 hover:scale-105 shadow-lg"
+          >
             <Zap class="h-5 w-5" />
             <span>🚀 Mulai Membangun Sekarang</span>
             <ArrowRight class="h-5 w-5" />
@@ -100,5 +110,12 @@ onMounted(() => {
         </div>
       </div>
     </div>
+
+    <!-- Signup Modal -->
+    <SignupModal 
+      :is-open="isSignupModalOpen"
+      @close="isSignupModalOpen = false"
+      @signup="handleSignup"
+    />
   </section>
 </template>

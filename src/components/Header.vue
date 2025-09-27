@@ -1,13 +1,26 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { Menu, X, Sparkles, Sun, Moon } from 'lucide-vue-next'
+import SignupModal from './SignupModal.vue'
 
 const isMenuOpen = ref(false)
 const isDark = ref(false)
+const isSignupModalOpen = ref(false)
 
 const toggleTheme = () => {
   isDark.value = !isDark.value
   document.documentElement.classList.toggle('dark')
+}
+
+const openSignupModal = () => {
+  isSignupModalOpen.value = true
+  isMenuOpen.value = false
+}
+
+const handleSignup = (data: { name: string; email: string; password: string }) => {
+  console.log('User signed up:', data)
+  // Here you would integrate with Supabase
+  // Example: await supabase.auth.signUp({ email: data.email, password: data.password })
 }
 </script>
 
@@ -35,7 +48,10 @@ const toggleTheme = () => {
             <Moon v-else class="h-5 w-5 text-gray-600 dark:text-gray-300" />
           </button>
           
-          <button class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors">
+          <button 
+            @click="openSignupModal"
+            class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors font-semibold"
+          >
             Mulai Gratis
           </button>
         </div>
@@ -58,11 +74,21 @@ const toggleTheme = () => {
           <a href="#integrations" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 transition-colors">Integrasi</a>
           <a href="#pricing" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 transition-colors">Harga</a>
           <a href="#testimonials" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 transition-colors">Testimoni</a>
-          <button class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors w-full">
+          <button 
+            @click="openSignupModal"
+            class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors w-full font-semibold"
+          >
             Mulai Gratis
           </button>
         </div>
       </div>
     </nav>
+
+    <!-- Signup Modal -->
+    <SignupModal 
+      :is-open="isSignupModalOpen"
+      @close="isSignupModalOpen = false"
+      @signup="handleSignup"
+    />
   </header>
 </template>

@@ -1,5 +1,9 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import { ArrowRight, Sparkles, Gift, Clock, Users } from 'lucide-vue-next'
+import SignupModal from './SignupModal.vue'
+
+const isSignupModalOpen = ref(false)
 
 const benefits = [
   {
@@ -15,6 +19,11 @@ const benefits = [
     text: 'Support 24/7 dalam bahasa Indonesia'
   }
 ]
+
+const handleSignup = (data: { name: string; email: string; password: string }) => {
+  console.log('User signed up:', data)
+  // Here you would integrate with Supabase
+}
 </script>
 
 <template>
@@ -41,7 +50,10 @@ const benefits = [
         </div>
         
         <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-6">
-          <button class="bg-blue-600 hover:bg-blue-700 text-white px-10 py-4 rounded-xl text-lg font-semibold transition-all duration-300 flex items-center space-x-2 hover:scale-105 shadow-lg">
+          <button 
+            @click="isSignupModalOpen = true"
+            class="bg-blue-600 hover:bg-blue-700 text-white px-10 py-4 rounded-xl text-lg font-semibold transition-all duration-300 flex items-center space-x-2 hover:scale-105 shadow-lg"
+          >
             <span>Mulai Membangun Sekarang</span>
             <ArrowRight class="h-5 w-5" />
           </button>
@@ -61,5 +73,12 @@ const benefits = [
         </div>
       </div>
     </div>
+
+    <!-- Signup Modal -->
+    <SignupModal 
+      :is-open="isSignupModalOpen"
+      @close="isSignupModalOpen = false"
+      @signup="handleSignup"
+    />
   </section>
 </template>

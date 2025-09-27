@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { Check, Zap, Crown, Building } from 'lucide-vue-next'
+import SignupModal from './SignupModal.vue'
 
 const isVisible = ref(false)
 const billingCycle = ref<'monthly' | 'yearly'>('monthly')
+const isSignupModalOpen = ref(false)
 
 const plans = [
   {
@@ -97,6 +99,23 @@ const faqs = [
     answer: 'Kami menyediakan community support untuk Starter, priority support untuk Pro, dan dedicated support untuk Enterprise.'
   }
 ]
+
+const handleSignup = (data: { name: string; email: string; password: string }) => {
+  console.log('User signed up:', data)
+  // Here you would integrate with Supabase
+}
+
+const selectPlan = (planName: string) => {
+  console.log('Selected plan:', planName)
+  if (planName === 'Starter') {
+    isSignupModalOpen.value = true
+  } else if (planName === 'Enterprise') {
+    // Open contact sales modal or redirect
+    window.open('mailto:sales@aiunifiedbuilder.com?subject=Enterprise Plan Inquiry', '_blank')
+  } else {
+    isSignupModalOpen.value = true
+  }
+}
 
 onMounted(() => {
   const observer = new IntersectionObserver((entries) => {
@@ -212,6 +231,7 @@ onMounted(() => {
 
           <!-- CTA Button -->
           <button 
+            @click="selectPlan(plan.name)"
             :class="[
               'w-full py-3 px-6 rounded-xl font-semibold transition-all duration-300',
               plan.popular 
@@ -237,5 +257,12 @@ onMounted(() => {
         </div>
       </div>
     </div>
+
+    <!-- Signup Modal -->
+    <SignupModal 
+      :is-open="isSignupModalOpen"
+      @close="isSignupModalOpen = false"
+      @signup="handleSignup"
+    />
   </section>
 </template>
